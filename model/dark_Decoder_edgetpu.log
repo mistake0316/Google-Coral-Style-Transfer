@@ -1,0 +1,14 @@
+Edge TPU Compiler version 14.1.317412892
+Input: dark_Decoder.tflite
+Output: dark_Decoder_edgetpu.tflite
+
+Operator                       Count      Status
+
+RESIZE_NEAREST_NEIGHBOR        1          Operation is otherwise supported, but not mapped due to some unspecified limitation
+RESIZE_NEAREST_NEIGHBOR        2          Mapped to Edge TPU
+QUANTIZE                       1          Operation is otherwise supported, but not mapped due to some unspecified limitation
+PAD                            7          Mapped to Edge TPU
+PAD                            2          More than one subgraph is not supported
+CONV_2D                        2          More than one subgraph is not supported
+CONV_2D                        7          Mapped to Edge TPU
+DEQUANTIZE                     1          Operation is working on an unsupported data type
