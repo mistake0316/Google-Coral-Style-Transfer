@@ -3,6 +3,7 @@ import tflite_runtime.interpreter as tflite
 import platform
 from PIL import Image
 import argparse
+from time import time
 
 EDGETPU_SHARED_LIB = {
   'Linux': 'libedgetpu.so.1',
@@ -65,7 +66,7 @@ if __name__ == "__main__":
   style_path = args.style_path
   
 
-
+  start_time = time()
 
   enc_interpreter = load_interpreter(encoder_path)
   dec_interpreter = load_interpreter(decoder_path)
@@ -88,19 +89,23 @@ if __name__ == "__main__":
   
   enc_interpreter.set_tensor(enc_details["input"][0]["index"], style_image)
   enc_interpreter.invoke()
-  style_code = enc_interpreter.get_tensor(enc_details["output"][0]["index"])
+
+  style_code = enc_interpreter.get_tensor(enc_details["output"][0]["index"])  
+  print(f"enc style done, total cost {time()-start_time}")
+
   style_mean, style_std = channel_mean_std(style_code)
-  
-  
+    
   enc_interpreter.set_tensor(enc_details["input"][0]["index"], content_image)
   enc_interpreter.invoke()
   content_code = enc_interpreter.get_tensor(enc_details["output"][0]["index"])
   content_mean, content_std = channel_mean_std(content_code)
-  
-  final_code = (content_code-content_mean)/content_std*style_std + style_mean
+  print(f"enc content done, total cost {time()-start_time}")
+
+  final_code = ((content_code-content_mean)/content_std)*style_std + style_mean
   dec_interpreter.set_tensor(dec_details["input"][0]["index"], final_code)
   dec_interpreter.invoke()
-  
+  print(f"dec done, total cost {time()-start_time}")
+
   result = dec_interpreter.get_tensor(dec_details["output"][0]["index"])
  
   if args.show:

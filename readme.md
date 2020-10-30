@@ -9,6 +9,8 @@
 3. run main.py
 ```bash
    python3 main.py
+   # if you want run on cpu
+   python3 main.py -d ./model/dark_Decoder.tflite -e ./model/dark_Encoder.tflite
    # for detailed parameter setting, please run 
    # python3 main.py -h
 ```
